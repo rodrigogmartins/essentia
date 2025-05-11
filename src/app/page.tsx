@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { mockPerfumes } from '@/lib/mockPerfumes'
 import { Check } from 'lucide-react'
-import Link from 'next/link'
+import { NavigationButton } from '@/components/navigationButtons'
 
 export default function Home() {
   const [selected, setSelected] = useState<string[]>([])
@@ -20,6 +20,8 @@ export default function Home() {
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
+      <NavigationButton nextButtonLink='/step2'/>
+
       <header className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-medium">Escolha perfumes que você já possui</h1>
         <div className="relative">
@@ -34,15 +36,6 @@ export default function Home() {
         placeholder="Buscar perfume..."
         className="w-full p-3 rounded-xl border border-neutral-300 mb-6 shadow-sm"
       />
-
-      <div className="mb-6 text-right">
-        <Link
-          href="/step2"
-          className="bg-neutral-100 text-neutral-900 font-semibold hover:bg-neutral-200 px-4 py-2 rounded-lg font-medium transition"
-        >
-          Próximo passo
-        </Link>
-      </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {mockPerfumes.map((perfume) => {
