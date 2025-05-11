@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { NavigationButton } from '@/components/navigationButtons'
 
 const mockResults = [
   {
@@ -35,6 +36,8 @@ export default function ResultPage() {
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
+      <NavigationButton nextButtonLink='/' nextButtonLabel='Refazer formulário'/>
+      
       <h1 className="text-2xl font-medium mb-6">Top recomendações para você</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -49,26 +52,17 @@ export default function ResultPage() {
             <img
               src={perfume.image_url}
               alt={perfume.name}
-              className="w-full h-48 object-cover"
+              className="w-full h-48 object-contain p-2"
             />
             <div className="p-2">
-              <h2 className="text-sm font-semibold leading-tight">
+              <h2 className="text-md font-semibold text-neutral-900 leading-tight">
                 {perfume.name}
               </h2>
-              <p className="text-xs text-neutral-500">{perfume.brand}</p>
-              <p className="text-xs mt-1">Nota: {perfume.rating} / Match: {(perfume.match_probability * 100).toFixed(0)}%</p>
+              <p className="text-sm text-neutral-600">{perfume.brand}</p>
+              <p className="text-xs mt-1 text-neutral-600">Nota: {perfume.rating} / Match: {(perfume.match_probability * 100).toFixed(0)}%</p>
             </div>
           </a>
         ))}
-      </div>
-
-      <div className="mt-6 text-right">
-        <Link
-          href="/"
-          className="px-6 py-3 rounded-xl border border-black text-black hover:bg-neutral-200 transition"
-        >
-          Refazer formulário
-        </Link>
       </div>
     </main>
   )

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { mockPerfumes } from '@/lib/mockPerfumes'
-import { Check } from 'lucide-react'
 import { NavigationButton } from '@/components/navigationButtons'
+import { PerfumeCard } from '@/components/perfumeCard'
 
 export default function Home() {
   const [selected, setSelected] = useState<string[]>([])
@@ -38,37 +38,17 @@ export default function Home() {
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {mockPerfumes.map((perfume) => {
-          const isSelected = selected.includes(perfume._id)
-          return (
-            <div
+        {mockPerfumes.map(
+          (perfume) => (
+            <PerfumeCard
               key={perfume._id}
-              onClick={() => toggleSelection(perfume._id)}
-              className={`relative cursor-pointer rounded-xl border transition-all overflow-hidden shadow-md hover:shadow-lg bg-white ${
-                isSelected ? 'ring-2 ring-black' : ''
-              }`}
-            >
-              <img
-                src={perfume.image_url}
-                alt={perfume.name}
-                className="w-full h-48 object-contain p-2"
-              />
-              <div className="p-2">
-                <h2 className="text-md font-semibold text-neutral-900 leading-tight">
-                  {perfume.name}
-                </h2>
-                <p className="text-sm text-neutral-600">{perfume.brand}</p>
-              </div>
-              {isSelected && (
-                <div className="absolute top-2 right-2 bg-black text-white rounded-full p-1">
-                  <Check size={16} />
-                </div>
-              )}
-            </div>
+              perfume={perfume}
+              isSelected={selected.includes(perfume._id)}
+              toggleSelection={toggleSelection}
+            />
           )
-        })}
+        )}
       </div>
-
     </main>
   )
 }

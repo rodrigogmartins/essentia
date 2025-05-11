@@ -31,6 +31,7 @@ export default function Step2() {
           selected={likedNotes}
           setSelected={setLikedNotes}
         />
+        
         <MultiSelect
           label="Acordes que gosta (opcional)"
           options={perfumesAccords}

@@ -4,10 +4,11 @@ import Link from 'next/link'
 
 export interface NavigationButtonI {
     backButtonLink?: string,
-    nextButtonLink: string
+    nextButtonLink: string,
+    nextButtonLabel?: string
 }
 
-export function NavigationButton({ backButtonLink, nextButtonLink }: NavigationButtonI) {
+export function NavigationButton({ backButtonLink, nextButtonLink, nextButtonLabel }: NavigationButtonI) {
   return (
       <div className="mb-6 flex justify-between">
         {
@@ -24,7 +25,7 @@ export function NavigationButton({ backButtonLink, nextButtonLink }: NavigationB
           href={nextButtonLink}
           className="max-h-fit bg-neutral-100 text-neutral-900 font-semibold hover:bg-neutral-200 px-4 py-2 rounded-lg font-medium transition"
         >
-          Próximo passo
+          { !!nextButtonLabel ? nextButtonLabel : "Próximo passo" }
         </Link>
       </div>
   )
