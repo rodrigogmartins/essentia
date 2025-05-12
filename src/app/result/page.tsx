@@ -47,6 +47,7 @@ export default function ResultPage() {
             href={perfume.url}
             target="_blank"
             rel="noopener noreferrer"
+            title='Visualizar página no Fragrantica'
             className="block rounded-xl overflow-hidden border bg-white shadow-sm hover:shadow-md transition"
           >
             <img
