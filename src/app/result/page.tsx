@@ -28,8 +28,45 @@ export default function ResultPage() {
   const [results, setResults] = useState<any[]>([])
 
   useEffect(() => {
+    const payload = buildRequestPayload()
+    console.log(payload)
+
     setResults(mockResults)
   }, [])
+
+  function buildRequestPayload() {
+    const savedStep1 = localStorage.getItem('step1')
+    const savedStep2 = localStorage.getItem('step2')
+    const savedStep3 = localStorage.getItem('step3')
+    const savedStep4 = localStorage.getItem('step4')
+
+    const payload: any = {}
+
+    if (!!savedStep1) {
+      payload.ownedPerfumes = JSON.parse(savedStep1)
+    }
+    
+    if (!!savedStep2) {
+      const { likedNotes, likedAccords } = JSON.parse(savedStep2) 
+      payload.likedNotes = likedNotes.map((it: any) => it.value)
+      payload.likedAccords = likedAccords.map((it: any) => it.value)
+    }
+    
+    if (!!savedStep3) {
+      const { notLikedNotes, notLikedAccords } = JSON.parse(savedStep3) 
+      payload.notLikedNotes = notLikedNotes.map((it: any) => it.value)
+      payload.notLikedAccords = notLikedAccords.map((it: any) => it.value)
+    }
+    
+    if (!!savedStep4) {
+      const { seasons , dayShifts, climates } = JSON.parse(savedStep4) 
+      payload.seasons = seasons
+      payload.dayShifts = dayShifts
+      payload.climates = climates
+    }
+
+    return payload
+  }
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
