@@ -1,20 +1,42 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { mockPerfumes } from '@/lib/mockPerfumes'
 import { NavigationButton } from '@/components/navigationButtons'
 import { PerfumeCard } from '@/components/perfumeCard'
 
 export default function Home() {
+  const isFirstPageLoad = useRef(true)
   const [selected, setSelected] = useState<string[]>([])
 
   const toggleSelection = (id: string) => {
     setSelected((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev?.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     )
   }
 
   useEffect(() => {
+    const saved = localStorage.getItem('step1')
+
+    if (saved == null) {
+      return;
+    }
+
+    try {
+      const selected = JSON.parse(saved);
+      setSelected(selected)
+    } catch (e) {
+      localStorage.removeItem('step1')
+      console.error('Erro ao ler dados do localStorage:', e)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isFirstPageLoad.current) {
+      isFirstPageLoad.current = false
+      return;
+    }
+
     localStorage.setItem('step1', JSON.stringify(selected))
   }, [selected])
 
@@ -25,8 +47,8 @@ export default function Home() {
       <header className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-medium">Escolha perfumes que você já possui</h1>
         <div className="relative">
-          <div className="w-10 h-10 rounded-full bg-neutral-100 text-neutral-900 font-semibold flex items-center justify-center" title={""+selected.length}>
-            { selected.length > 9 ? "9+" : selected.length }
+          <div className="w-10 h-10 rounded-full bg-neutral-100 text-neutral-900 font-semibold flex items-center justify-center" title={""+(selected?.length || 0)}>
+            { selected?.length > 9 ? "9+" : (selected?.length || 0) }
           </div>
         </div>
       </header>
@@ -43,7 +65,7 @@ export default function Home() {
             <PerfumeCard
               key={perfume._id}
               perfume={perfume}
-              isSelected={selected.includes(perfume._id)}
+              isSelected={selected?.includes(perfume._id)}
               toggleSelection={toggleSelection}
             />
           )

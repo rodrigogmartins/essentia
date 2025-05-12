@@ -1,16 +1,39 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { NavigationButton } from '@/components/navigationButtons'
 import { MultiSelect } from '@/components/multiSelect'
 import { perfumesNotes } from '@/data/perfumesNotes'
 import { perfumesAccords } from '@/data/perfumesAccords'
 
 export default function Step3() {
+  const isFirstPageLoad = useRef(true)
   const [notLikedNotes, setNotLikedNotes] = useState<string[]>([])
   const [notLikedAccords, setNotLikedAccords] = useState<string[]>([])
 
   useEffect(() => {
+    const saved = localStorage.getItem('step3')
+
+    if (saved == null) {
+      return;
+    }
+
+    try {
+      const { notLikedNotes, notLikedAccords } = JSON.parse(saved);
+      setNotLikedNotes(notLikedNotes)
+      setNotLikedAccords(notLikedAccords)
+    } catch (e) {
+      localStorage.removeItem('step3')
+      console.error('Erro ao ler dados do localStorage:', e)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isFirstPageLoad.current) {
+      isFirstPageLoad.current = false
+      return;
+    }
+
     const data = {
       notLikedNotes,
       notLikedAccords,

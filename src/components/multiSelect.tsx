@@ -48,7 +48,7 @@ export function MultiSelect({ label, options, selected, setSelected }: MultiSele
   const filteredOptions = options.filter(
     (opt: any) =>
       normalize(opt.description).includes(normalize(query)) &&
-        !selected.some((s: any) => s.value === opt.value)
+        !selected?.some((s: any) => s.value === opt.value)
   )
 
   const addOption = (option: any) => {

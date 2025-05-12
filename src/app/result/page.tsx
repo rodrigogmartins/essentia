@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { NavigationButton } from '@/components/navigationButtons'
 
 const mockResults = [
@@ -29,9 +28,7 @@ export default function ResultPage() {
   const [results, setResults] = useState<any[]>([])
 
   useEffect(() => {
-    // Simula o carregamento do resultado do localStorage ou API
     setResults(mockResults)
-    localStorage.setItem('lastResult', JSON.stringify(mockResults))
   }, [])
 
   return (
