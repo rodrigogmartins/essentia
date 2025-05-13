@@ -5,6 +5,7 @@ import { NavigationButton } from '@/components/navigationButtons'
 import { PerfumeCard } from '@/components/perfumeCard'
 import { usePerfumeSearch } from '@/hooks/usePerfumeSearch'
 import { useDebounce } from '@/hooks/useDebounce'
+import { useInView } from 'react-intersection-observer'
 
 export default function Home() {
   const isFirstPageLoad = useRef(true)
@@ -12,6 +13,7 @@ export default function Home() {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 500)
   const { results, loading, hasMore, loadMore } = usePerfumeSearch(debouncedQuery)
+  const { ref, inView } = useInView();
 
   const toggleSelection = (id: string) => {
     setSelected((prev) =>
@@ -45,19 +47,10 @@ export default function Home() {
   }, [selected])
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY
-      const windowHeight = window.innerHeight
-      const documentHeight = document.documentElement.scrollHeight
-
-      if (scrollY + windowHeight >= documentHeight - 500 && hasMore && !loading) {
-        loadMore()
-      }
+    if (inView && hasMore && !loading) {
+      loadMore();
     }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [loadMore, hasMore, loading])
+  }, [inView, hasMore, loading, loadMore]);
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
@@ -80,7 +73,7 @@ export default function Home() {
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {!loading && results.map(
+        {results.map(
             (perfume: any) => (
               <PerfumeCard
                 key={perfume._id}
@@ -92,6 +85,10 @@ export default function Home() {
           )
         }
       </div>
+      
+      <div ref={ref} className="h-10" />
+
+      {loading && <p className="text-center mt-4">Carregando...</p>}
     </main>
   )
 }

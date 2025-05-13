@@ -2,11 +2,11 @@ import { PerfumeResult } from '@/types/perfume'
 import { useEffect, useState } from 'react'
 
 export function usePerfumeSearch(query: string) {
+  let hasMore = true
   const limit = 21
   const [results, setResults] = useState<PerfumeResult[]>([])
   const [loading, setLoading] = useState(false)
   const [offset, setOffset] = useState(0)
-  const [hasMore, setHasMore] = useState(true)
 
   const fetchData = (newOffset = 0) => {
     if (loading || !hasMore) return
@@ -21,14 +21,14 @@ export function usePerfumeSearch(query: string) {
       .then((res) => res.json())
       .then((data) => {
         const itemsList = data.items || []
-        setHasMore(itemsList.length === limit)
+        hasMore = (itemsList.length === limit)
         itemsList.pop()
         setResults((prev) => ( offset === 0 ? itemsList : [...prev, ...itemsList]))
         setOffset((prev) => prev + (limit - 1))
       })
       .catch((err) => {
         console.error('Erro ao buscar perfumes:', err)
-        setHasMore(false)
+        hasMore = false
       })
       .finally(() => setLoading(false))
   }
@@ -41,7 +41,7 @@ export function usePerfumeSearch(query: string) {
 
   useEffect(() => {
     setOffset(0)
-    setHasMore(true)
+    hasMore = true
   }, [query])
 
   useEffect(() => {
