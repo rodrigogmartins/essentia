@@ -1,5 +1,5 @@
 export type PerfumeResult = {
-  _id: string
+  id: string
   name: string
   brand: string
   url: string

@@ -7,6 +7,7 @@ import { usePerfumeSearch } from '@/hooks/usePerfumeSearch'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useInView } from 'react-intersection-observer'
 import { PerfumeCardSkeleton } from '@/components/perfumeCardSkeleton'
+import { PerfumeResult } from '@/types/perfume'
 
 export default function Home() {
   const isFirstPageLoad = useRef(true)
@@ -49,10 +50,10 @@ export default function Home() {
     }
   }, [inView, hasMore, loading, loadMore]);
 
-  const toggleSelection = (perfume: any) => {
+  const toggleSelection = (perfume: PerfumeResult) => {
     setSelected((prev) => {
-      return !!prev?.find((item) => item._id === perfume._id)
-        ? prev.filter((item) => item._id !== perfume._id)
+      return !!prev?.find((item) => item.id === perfume.id)
+        ? prev.filter((item) => item.id !== perfume.id)
         : [...prev, perfume]
     })
   }
@@ -61,11 +62,11 @@ export default function Home() {
     <main className="p-4 max-w-4xl mx-auto">
       <NavigationButton nextButtonLink='/step2'/>
 
-      <header className="flex items-center justify-between mb-6">
+      <header className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-medium">Escolha perfumes que você gosta</h1>
-        <div className="relative">
+        <div className="relative w-full sm:w-auto">
           <div
-            className="max-h-fit bg-neutral-100 text-neutral-900 font-semibold hover:bg-neutral-200 px-4 py-2 rounded-lg font-medium transition"
+            className="max-h-fit bg-neutral-100 text-neutral-900 font-semibold hover:bg-neutral-200 px-4 py-2 rounded-lg text-center font-medium transition w-full sm:w-auto"
             title={""+(selected?.length || 0)}
             onClick={() => setShowSelected(!showSelected)}
           >
@@ -88,11 +89,11 @@ export default function Home() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {!showSelected && results.map(
-            (perfume: any) => (
+            (perfume: PerfumeResult) => (
               <PerfumeCard
-                key={perfume._id}
+                key={perfume.id}
                 perfume={perfume}
-                isSelected={selected?.find((item) => item._id === perfume._id)}
+                isSelected={selected?.find((item) => item.id === perfume.id)}
                 toggleSelection={toggleSelection}
               />
             )
@@ -100,9 +101,9 @@ export default function Home() {
         }
         
         {showSelected && selected.map(
-            (perfume: any) => (
+            (perfume: PerfumeResult) => (
               <PerfumeCard
-                key={perfume._id}
+                key={perfume.id}
                 perfume={perfume}
                 isSelected={true}
                 toggleSelection={toggleSelection}

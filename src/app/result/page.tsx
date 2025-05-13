@@ -2,36 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import { NavigationButton } from '@/components/navigationButtons'
-
-const mockResults = [
-  {
-    _id: '23569',
-    name: 'Shisha Lounge',
-    brand: 'Ricardo Ramos Perfumes de Autor',
-    image_url: 'https://fimgs.net/mdimg/perfume/375x500.58575.jpg',
-    url: 'https://www.fragrantica.com/perfume/ricardo-ramos-perfumes-de-autor/shisha-lounge-58575.html',
-    rating: 4.46,
-    match_probability: 0.53,
-  },
-  {
-    _id: '3928',
-    name: 'Bleu de Chanel',
-    brand: 'Chanel',
-    image_url: 'https://fimgs.net/mdimg/perfume/375x500.7035.jpg',
-    url: 'https://www.fragrantica.com/perfume/chanel/bleu-de-chanel-7035.html',
-    rating: 4.32,
-    match_probability: 0.51,
-  },
-]
+import { useFetchPerfumeRecommendations } from '@/hooks/useFetchPerfumeRecommendations'
+import { PerfumeCardSkeleton } from '@/components/perfumeCardSkeleton'
+import { PerfumeRecommendationResult } from '@/types/perfumeRecommendation'
 
 export default function ResultPage() {
-  const [results, setResults] = useState<any[]>([])
+  const { results, loading, error, fetchRecommendations } = useFetchPerfumeRecommendations()
 
   useEffect(() => {
     const payload = buildRequestPayload()
-    console.log(payload)
-
-    setResults(mockResults)
+    fetchRecommendations(payload)
   }, [])
 
   function buildRequestPayload() {
@@ -43,7 +23,8 @@ export default function ResultPage() {
     const payload: any = {}
 
     if (!!savedStep1) {
-      payload.ownedPerfumes = JSON.parse(savedStep1)
+      const ownedPerfumes = JSON.parse(savedStep1)
+      payload.ownedPerfumes = ownedPerfumes.map((item: any) => item.id)
     }
     
     if (!!savedStep2) {
@@ -75,9 +56,9 @@ export default function ResultPage() {
       <h1 className="text-2xl font-medium mb-6">Top recomendações para você</h1>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {results.map((perfume) => (
+        {results.map((perfume: PerfumeRecommendationResult) => (
           <a
-            key={perfume._id}
+            key={perfume.id}
             href={perfume.url}
             target="_blank"
             rel="noopener noreferrer"
@@ -94,11 +75,19 @@ export default function ResultPage() {
                 {perfume.name}
               </h2>
               <p className="text-sm text-neutral-600">{perfume.brand}</p>
-              <p className="text-xs mt-1 text-neutral-600">Nota: {perfume.rating} / Match: {(perfume.match_probability * 100).toFixed(0)}%</p>
+              <p className="text-xs mt-1 text-neutral-700">Nota: {perfume.rating}</p>
             </div>
           </a>
         ))}
       </div>
+
+      {loading && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <PerfumeCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
     </main>
   )
 }
