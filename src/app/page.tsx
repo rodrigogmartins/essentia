@@ -6,20 +6,17 @@ import { PerfumeCard } from '@/components/perfumeCard'
 import { usePerfumeSearch } from '@/hooks/usePerfumeSearch'
 import { useDebounce } from '@/hooks/useDebounce'
 import { useInView } from 'react-intersection-observer'
+import { PerfumeCardSkeleton } from '@/components/perfumeCardSkeleton'
 
 export default function Home() {
   const isFirstPageLoad = useRef(true)
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<any[]>([])
+  const [showSelected, setShowSelected] = useState(false)
   const [query, setQuery] = useState('')
-  const debouncedQuery = useDebounce(query, 500)
-  const { results, loading, hasMore, loadMore } = usePerfumeSearch(debouncedQuery)
   const { ref, inView } = useInView();
 
-  const toggleSelection = (id: string) => {
-    setSelected((prev) =>
-      prev?.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    )
-  }
+  const debouncedQuery = useDebounce(query, 500)
+  const { results, loading, hasMore, loadMore } = usePerfumeSearch(debouncedQuery)
 
   useEffect(() => {
     const saved = localStorage.getItem('step1')
@@ -47,20 +44,37 @@ export default function Home() {
   }, [selected])
 
   useEffect(() => {
-    if (inView && hasMore && !loading) {
+    if (inView && hasMore && !loading && !showSelected) {
       loadMore();
     }
   }, [inView, hasMore, loading, loadMore]);
+
+  const toggleSelection = (perfume: any) => {
+    setSelected((prev) => {
+      return !!prev?.find((item) => item._id === perfume._id)
+        ? prev.filter((item) => item._id !== perfume._id)
+        : [...prev, perfume]
+    })
+  }
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
       <NavigationButton nextButtonLink='/step2'/>
 
       <header className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-medium">Escolha perfumes que você já possui</h1>
+        <h1 className="text-2xl font-medium">Escolha perfumes que você gosta</h1>
         <div className="relative">
-          <div className="w-10 h-10 rounded-full bg-neutral-100 text-neutral-900 font-semibold flex items-center justify-center" title={""+(selected?.length || 0)}>
-            { selected?.length > 9 ? "9+" : (selected?.length || 0) }
+          <div
+            className="max-h-fit bg-neutral-100 text-neutral-900 font-semibold hover:bg-neutral-200 px-4 py-2 rounded-lg font-medium transition"
+            title={""+(selected?.length || 0)}
+            onClick={() => setShowSelected(!showSelected)}
+          >
+            {
+              showSelected
+                ? `Visualizar itens selecionados (${ selected?.length > 9 ? "9+" : (selected?.length || 0) })`
+                : `Visualizar todos os itens (${ selected?.length > 9 ? "9+" : (selected?.length || 0) })`
+            }
+            
           </div>
         </div>
       </header>
@@ -73,12 +87,24 @@ export default function Home() {
       />
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-        {results.map(
+        {!showSelected && results.map(
             (perfume: any) => (
               <PerfumeCard
                 key={perfume._id}
                 perfume={perfume}
-                isSelected={selected?.includes(perfume._id)}
+                isSelected={selected?.find((item) => item._id === perfume._id)}
+                toggleSelection={toggleSelection}
+              />
+            )
+          )
+        }
+        
+        {showSelected && selected.map(
+            (perfume: any) => (
+              <PerfumeCard
+                key={perfume._id}
+                perfume={perfume}
+                isSelected={true}
                 toggleSelection={toggleSelection}
               />
             )
@@ -88,7 +114,13 @@ export default function Home() {
       
       <div ref={ref} className="h-10" />
 
-      {loading && <p className="text-center mt-4">Carregando...</p>}
+      {loading && (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <PerfumeCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
     </main>
   )
 }

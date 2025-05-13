@@ -3,7 +3,7 @@ import { Check } from 'lucide-react'
 export function PerfumeCard({ perfume, isSelected, toggleSelection }: any) {
   return (
     <div
-      onClick={() => toggleSelection(perfume._id)}
+      onClick={() => toggleSelection(perfume)}
       className={`relative cursor-pointer rounded-xl border transition-all overflow-hidden shadow-md hover:shadow-lg bg-white ${
         isSelected ? 'ring-2 ring-black' : ''
       }`}
