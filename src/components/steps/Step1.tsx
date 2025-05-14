@@ -115,7 +115,7 @@ export default function Step1({ onNext }: StepProps) {
         }
       </div>
       
-      <div ref={ref} className="h-10" />
+      {!loading && <div ref={ref} className="h-10" />}
 
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">

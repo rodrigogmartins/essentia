@@ -2,13 +2,14 @@ import { PerfumeResult } from '@/types/perfume'
 import { useEffect, useState } from 'react'
 
 export function usePerfumeSearch(query: string) {
-  let hasMore = true
   const limit = 21
   const [results, setResults] = useState<PerfumeResult[]>([])
+  const [hasMore, setHasMore] = useState(false)
   const [loading, setLoading] = useState(false)
   const [offset, setOffset] = useState(0)
 
   const fetchData = (newOffset = 0) => {
+    console.log(hasMore)
     if (loading || !hasMore) return
 
     const queryParam = query
@@ -16,19 +17,22 @@ export function usePerfumeSearch(query: string) {
       : `?limit=${limit}&offset=${newOffset}`
 
     setLoading(true)
+    console.log(`1 - OFFSET FETCH: ${offset}, NEW ${newOffset}`)
 
     fetch(`http://192.168.2.110:8000/api/perfumes/search${queryParam}`)
       .then((res) => res.json())
       .then((data) => {
         const itemsList = data.items || []
-        hasMore = (itemsList.length === limit)
+        setHasMore(itemsList.length === limit)
         itemsList.pop()
-        setResults((prev) => ( offset === 0 ? itemsList : [...prev, ...itemsList]))
+        setResults((prev) => ( newOffset === 0 ? itemsList : [...prev, ...itemsList]))
         setOffset((prev) => prev + (limit - 1))
+       console.log(`2 - OFFSET FETCH: ${offset}, NEW ${newOffset}`)
+
       })
       .catch((err) => {
         console.error('Erro ao buscar perfumes:', err)
-        hasMore = false
+        setHasMore(false)
       })
       .finally(() => setLoading(false))
   }
@@ -40,8 +44,10 @@ export function usePerfumeSearch(query: string) {
   }
 
   useEffect(() => {
+    setResults([])
     setOffset(0)
-    hasMore = true
+    setHasMore(true)
+    fetchData(0)
   }, [query])
 
   useEffect(() => {
