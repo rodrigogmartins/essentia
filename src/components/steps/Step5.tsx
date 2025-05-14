@@ -45,7 +45,7 @@ export default function Step5({ onBack, onNext }: StepProps) {
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <NavigationButton onBack={onBack} onNext={onNext} nextButtonLabel="Ver recomendações" />
+      <NavigationButton onBack={onBack} onNext={onNext} />
 
       <h1 className="text-2xl font-medium mb-6">Onde e quando você pretende usar o perfume?</h1>
 

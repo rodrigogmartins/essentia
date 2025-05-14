@@ -18,10 +18,10 @@ export default function Step6({ onBack }: StepProps) {
 
   function buildRequestPayload(): RecommendationInput {
     const savedStep1 = localStorage.getItem('step1')
-    const savedStep2 = localStorage.getItem('step5')
+    const savedStep2 = localStorage.getItem('step2')
     const savedStep3 = localStorage.getItem('step3')
-    const savedStep4 = localStorage.getItem('step3')
-    const savedStep5 = localStorage.getItem('step4')
+    const savedStep4 = localStorage.getItem('step4')
+    const savedStep5 = localStorage.getItem('step5')
 
     const payload: RecommendationInput = {}
 
@@ -63,7 +63,7 @@ export default function Step6({ onBack }: StepProps) {
       
       <h1 className="text-2xl font-medium mb-6">Top recomendações para você</h1>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {results.map((perfume: PerfumeRecommendationResult) => (
           <a
             key={perfume.id}
@@ -90,7 +90,7 @@ export default function Step6({ onBack }: StepProps) {
       </div>
 
       {loading && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <PerfumeCardSkeleton key={i} />
           ))}

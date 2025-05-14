@@ -40,7 +40,10 @@ export function MultiSelect({ label, options, selected, setSelected }: MultiSele
   const [query, setQuery] = useState('')
   const [highlightedIndex, setHighlightedIndex] = useState(0)
   const [isFocused, setIsFocused] = useState(false)
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
     
   const normalize = (str: string) =>
     str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/ç/g, 'c').toLowerCase()
@@ -82,11 +85,40 @@ export function MultiSelect({ label, options, selected, setSelected }: MultiSele
   }
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsFocused(false);
+      }
+    };
+    const handleFocus = () => {
+      setTimeout(() => {
+        inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 300)
+    }
+
+    const input = inputRef.current
+    input?.addEventListener('focus', handleFocus)
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      input?.removeEventListener('focus', handleFocus)
+    };
+  }, []);
+
+  useEffect(() => {
+    const ref = optionRefs.current[highlightedIndex];
+    
+    if (ref) {
+      ref.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [highlightedIndex]);
+
+  useEffect(() => {
     setHighlightedIndex(0)
   }, [query])
 
   return (
-    <div className="w-full mb-6 relative">
+    <div ref={containerRef} className="w-full mb-6 relative">
       <p className="font-medium mb-2">{label}</p>
       <div className="flex flex-wrap gap-2 mb-2">
         {selected.map((opt:any) => (
@@ -112,14 +144,17 @@ export function MultiSelect({ label, options, selected, setSelected }: MultiSele
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         onKeyDown={handleKeyDown}
       />
       {isFocused && (
-        <div className="absolute z-50 bg-black border border-gray-300 mt-1 rounded-md shadow-md w-full max-h-48 overflow-y-auto">
+        <div
+          className="absolute z-50 bg-black border border-gray-300 mt-1 rounded-md shadow-md w-full max-h-48 overflow-y-auto"
+          style={{ WebkitOverflowScrolling: 'touch', touchAction: 'manipulation', overscrollBehavior: 'contain' }}
+        >
           {filteredOptions.map((opt:any, index: number) => (
             <div
               key={opt.value}
+              ref={(el) => optionRefs.current[index] = el}
               onClick={() => addOption(opt)}
               className={cn(
                 'px-3 py-2 cursor-pointer',

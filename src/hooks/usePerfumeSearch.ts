@@ -17,7 +17,7 @@ export function usePerfumeSearch(query: string) {
 
     setLoading(true)
 
-    fetch(`http://localhost:8000/api/perfumes/search${queryParam}`)
+    fetch(`http://192.168.2.110:8000/api/perfumes/search${queryParam}`)
       .then((res) => res.json())
       .then((data) => {
         const itemsList = data.items || []

@@ -89,7 +89,7 @@ export default function Step2({ onBack, onNext }: StepProps) {
         onChange={(e) => setQuery(e.target.value)}
       />
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {!showSelected && results.map(
             (perfume: PerfumeResult) => (
               <PerfumeCard
@@ -118,7 +118,7 @@ export default function Step2({ onBack, onNext }: StepProps) {
       <div ref={ref} className="h-10" />
 
       {loading && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, i) => (
             <PerfumeCardSkeleton key={i} />
           ))}
