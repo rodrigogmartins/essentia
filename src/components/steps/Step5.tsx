@@ -1,20 +1,22 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { predefinedSeasons } from '@/data/predefinedSeasons'
-import { predefinedShifts } from '@/data/predefinedShifts'
-import { predefinedClimates } from '@/data/predefinedClimates'
-import { NavigationButton } from '@/components/navigationButtons'
-import { MultiSelectChips } from '@/components/multiSelect'
+import { NavigationButton } from '@/components/NavigationButtons'
+import { MultiSelectChips } from '@/components/MultiSelect'
+import { StepProps } from './StepProps'
+import { predefinedSeasons } from '@/data/PredefinedSeasons'
+import { predefinedShifts } from '@/data/PredefinedShifts'
+import { predefinedClimates } from '@/data/PredefinedClimates'
 
-export default function Step4() {
+export default function Step5({ onBack, onNext }: StepProps) {
+  const STEP = 'step5'
   const isFirstPageLoad = useRef(true)
   const [seasons, setSeasons] = useState<string[]>([])
   const [dayShifts, setDayShifts] = useState<string[]>([])
   const [climates, setClimates] = useState<string[]>([])
 
   useEffect(() => {
-    const saved = localStorage.getItem('step4')
+    const saved = localStorage.getItem(STEP)
 
     if (saved == null) {
       return;
@@ -26,7 +28,7 @@ export default function Step4() {
       setDayShifts(dayShifts)
       setClimates(climates)
     } catch (e) {
-      localStorage.removeItem('step4')
+      localStorage.removeItem(STEP)
       console.error('Erro ao ler dados do localStorage:', e)
     }
   }, [])
@@ -38,12 +40,12 @@ export default function Step4() {
     }
 
     const data = { seasons, dayShifts, climates }
-    localStorage.setItem('step4', JSON.stringify(data))
+    localStorage.setItem(STEP, JSON.stringify(data))
   }, [seasons, dayShifts, climates])
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <NavigationButton backButtonLink='/step3' nextButtonLink='/result' nextButtonLabel="Ver recomendações" />
+      <NavigationButton onBack={onBack} onNext={onNext} nextButtonLabel="Ver recomendações" />
 
       <h1 className="text-2xl font-medium mb-6">Onde e quando você pretende usar o perfume?</h1>
 

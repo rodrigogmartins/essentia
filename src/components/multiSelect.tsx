@@ -1,4 +1,4 @@
-import { MultiSelectOptionsI } from "@/data/multiSelectOptions.interface"
+import { MultiSelectOptionsI } from "@/data/MultiSelectOptions.interface"
 import { cn } from "@/lib/utils"
 import { useEffect, useRef, useState } from "react"
 

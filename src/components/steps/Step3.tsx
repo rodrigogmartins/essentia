@@ -1,18 +1,20 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { NavigationButton } from '@/components/navigationButtons'
-import { MultiSelect } from '@/components/multiSelect'
-import { perfumesAccords } from '@/data/perfumesAccords'
-import { perfumesNotes } from '@/data/perfumesNotes'
+import { NavigationButton } from '@/components/NavigationButtons'
+import { MultiSelect } from '@/components/MultiSelect'
+import { perfumesAccords } from '@/data/PerfumesAccords'
+import { perfumesNotes } from '@/data/PerfumesNotes'
+import { StepProps } from './StepProps'
 
-export default function Step2() {
+export default function Step3({ onBack, onNext }: StepProps) {
+  const STEP = 'step3'
   const isFirstPageLoad = useRef(true)
   const [likedNotes, setLikedNotes] = useState<string[]>([])
   const [likedAccords, setLikedAccords] = useState<string[]>([])
 
   useEffect(() => {
-    const saved = localStorage.getItem('step2')
+    const saved = localStorage.getItem(STEP)
 
     if (saved == null) {
       return;
@@ -23,7 +25,7 @@ export default function Step2() {
       setLikedNotes(likedNotes)
       setLikedAccords(likedAccords)
     } catch (e) {
-      localStorage.removeItem('step2')
+      localStorage.removeItem(STEP)
       console.error('Erro ao ler dados do localStorage:', e)
     }
   }, [])
@@ -38,12 +40,12 @@ export default function Step2() {
       likedNotes,
       likedAccords
     }
-    localStorage.setItem('step2', JSON.stringify(data))
+    localStorage.setItem(STEP, JSON.stringify(data))
   }, [likedNotes, likedAccords])
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <NavigationButton backButtonLink='/' nextButtonLink='/step3'/>
+      <NavigationButton onBack={onBack} onNext={onNext} />
 
       <h1 className="text-2xl font-medium mb-6">Quais notas e acordes você gosta?</h1>
 

@@ -1,4 +1,4 @@
-import { MultiSelectOptionsI } from "./multiSelectOptions.interface";
+import { MultiSelectOptionsI } from "./MultiSelectOptions.interface";
 
 export const perfumesAccords: MultiSelectOptionsI[] = [
   { description: 'Cítrico', value: 'citrus' },

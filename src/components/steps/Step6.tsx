@@ -1,12 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { NavigationButton } from '@/components/navigationButtons'
+import { useEffect } from 'react'
+import { NavigationButton } from '@/components/NavigationButtons'
 import { useFetchPerfumeRecommendations } from '@/hooks/useFetchPerfumeRecommendations'
-import { PerfumeCardSkeleton } from '@/components/perfumeCardSkeleton'
+import { PerfumeCardSkeleton } from '@/components/PerfumeCardSkeleton'
 import { PerfumeRecommendationResult } from '@/types/perfumeRecommendation'
+import { StepProps } from './StepProps'
+import { RecommendationInput } from '@/data/RecommendationsInput.interface'
 
-export default function ResultPage() {
+export default function Step6({ onBack }: StepProps) {
   const { results, loading, error, fetchRecommendations } = useFetchPerfumeRecommendations()
 
   useEffect(() => {
@@ -14,33 +16,39 @@ export default function ResultPage() {
     fetchRecommendations(payload)
   }, [])
 
-  function buildRequestPayload() {
+  function buildRequestPayload(): RecommendationInput {
     const savedStep1 = localStorage.getItem('step1')
-    const savedStep2 = localStorage.getItem('step2')
+    const savedStep2 = localStorage.getItem('step5')
     const savedStep3 = localStorage.getItem('step3')
-    const savedStep4 = localStorage.getItem('step4')
+    const savedStep4 = localStorage.getItem('step3')
+    const savedStep5 = localStorage.getItem('step4')
 
-    const payload: any = {}
+    const payload: RecommendationInput = {}
 
     if (!!savedStep1) {
       const ownedPerfumes = JSON.parse(savedStep1)
       payload.ownedPerfumes = ownedPerfumes.map((item: any) => item.id)
     }
-    
+
     if (!!savedStep2) {
-      const { likedNotes, likedAccords } = JSON.parse(savedStep2) 
+      const likedPerfumes = JSON.parse(savedStep2)
+      payload.likedPerfumes = likedPerfumes.map((item: any) => item.id)
+    }
+    
+    if (!!savedStep3) {
+      const { likedNotes, likedAccords } = JSON.parse(savedStep3) 
       payload.likedNotes = likedNotes.map((it: any) => it.value)
       payload.likedAccords = likedAccords.map((it: any) => it.value)
     }
     
-    if (!!savedStep3) {
-      const { notLikedNotes, notLikedAccords } = JSON.parse(savedStep3) 
+    if (!!savedStep4) {
+      const { notLikedNotes, notLikedAccords } = JSON.parse(savedStep4) 
       payload.notLikedNotes = notLikedNotes.map((it: any) => it.value)
       payload.notLikedAccords = notLikedAccords.map((it: any) => it.value)
     }
     
-    if (!!savedStep4) {
-      const { seasons , dayShifts, climates } = JSON.parse(savedStep4) 
+    if (!!savedStep5) {
+      const { seasons , dayShifts, climates } = JSON.parse(savedStep5) 
       payload.seasons = seasons
       payload.dayShifts = dayShifts
       payload.climates = climates
@@ -51,7 +59,7 @@ export default function ResultPage() {
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <NavigationButton nextButtonLink='/' nextButtonLabel='Refazer formulário'/>
+      <NavigationButton onBack={onBack} />
       
       <h1 className="text-2xl font-medium mb-6">Top recomendações para você</h1>
 
