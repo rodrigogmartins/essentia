@@ -11,12 +11,12 @@ import { PerfumeResult } from '@/types/perfume'
 import { StepProps } from './StepProps'
 
 export default function Step1({ onNext }: StepProps) {
-  const STEP = 'step1';
+  const STEP = 'step1'
   const isFirstPageLoad = useRef(true)
   const [selected, setSelected] = useState<any[]>([])
   const [showSelected, setShowSelected] = useState(false)
   const [query, setQuery] = useState('')
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView()
 
   const debouncedQuery = useDebounce(query, 500)
   const { results, loading, hasMore, loadMore } = usePerfumeSearch(debouncedQuery)

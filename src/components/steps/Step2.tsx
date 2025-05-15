@@ -16,7 +16,7 @@ export default function Step2({ onBack, onNext }: StepProps) {
   const [selected, setSelected] = useState<any[]>([])
   const [showSelected, setShowSelected] = useState(false)
   const [query, setQuery] = useState('')
-  const { ref, inView } = useInView();
+  const { ref, inView } = useInView()
 
   const debouncedQuery = useDebounce(query, 500)
   const { results, loading, hasMore, loadMore } = usePerfumeSearch(debouncedQuery)
@@ -115,7 +115,7 @@ export default function Step2({ onBack, onNext }: StepProps) {
         }
       </div>
       
-      <div ref={ref} className="h-10" />
+      {!loading && <div ref={ref} className="h-10" />}
 
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
