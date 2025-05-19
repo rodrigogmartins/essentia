@@ -10,7 +10,7 @@ import { PerfumeCardSkeleton } from '@/components/PerfumeCardSkeleton'
 import { PerfumeResult } from '@/types/perfume'
 import { StepProps } from './StepProps'
 
-export default function Step1({ onNext }: StepProps) {
+export default function Step1({ onBack, onNext }: StepProps) {
   const STEP = 'step1'
   const isFirstPageLoad = useRef(true)
   const [selected, setSelected] = useState<any[]>([])
@@ -62,7 +62,7 @@ export default function Step1({ onNext }: StepProps) {
 
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <NavigationButton onNext={onNext} />
+      <NavigationButton onBack={onBack} onNext={onNext} />
 
       <header className="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4 mb-6">
         <h1 className="text-2xl font-medium">Escolha perfumes que você possui</h1>
