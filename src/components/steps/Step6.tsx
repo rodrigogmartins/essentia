@@ -8,7 +8,7 @@ import { PerfumeRecommendationResult } from '@/types/perfumeRecommendation'
 import { StepProps } from './StepProps'
 import { RecommendationInput } from '@/data/RecommendationsInput.interface'
 
-export default function Step6({ onBack }: StepProps) {
+export default function Step6({ onBack, pageStateKeyPrefix }: StepProps) {
   const { results, loading, error, fetchRecommendations } = useFetchPerfumeRecommendations()
 
   useEffect(() => {
@@ -17,11 +17,11 @@ export default function Step6({ onBack }: StepProps) {
   }, [])
 
   function buildRequestPayload(): RecommendationInput {
-    const savedStep1 = localStorage.getItem('step1')
-    const savedStep2 = localStorage.getItem('step2')
-    const savedStep3 = localStorage.getItem('step3')
-    const savedStep4 = localStorage.getItem('step4')
-    const savedStep5 = localStorage.getItem('step5')
+    const savedStep1 = localStorage.getItem(`${pageStateKeyPrefix}-step1`)
+    const savedStep2 = localStorage.getItem(`${pageStateKeyPrefix}-step2`)
+    const savedStep3 = localStorage.getItem(`${pageStateKeyPrefix}-step3`)
+    const savedStep4 = localStorage.getItem(`${pageStateKeyPrefix}-step4`)
+    const savedStep5 = localStorage.getItem(`${pageStateKeyPrefix}-step5`)
 
     const payload: RecommendationInput = {}
 

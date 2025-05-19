@@ -19,7 +19,7 @@ export function usePerfumeSearch(query: string) {
       : `?limit=${limit}&offset=${offsetToUse}`
 
     try {
-      const res = await fetch(`http://192.168.2.110:8000/api/perfumes/search${queryParam}`)
+      const res = await fetch(`http://localhost:8000/api/perfumes/search${queryParam}`)
       const data = await res.json()
       const items = data.items || []
 

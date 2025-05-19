@@ -12,7 +12,7 @@ export function useFetchPerfumeRecommendations() {
       setLoading(true)
       setError(null)
 
-      const response = await fetch('http://192.168.2.110:8000/api/perfumes/recommendations?limit=8', {
+      const response = await fetch('http://localhost:8000/api/perfumes/recommendations?limit=8', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

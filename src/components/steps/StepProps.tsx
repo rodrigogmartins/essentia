@@ -1,4 +1,5 @@
 export interface StepProps {
   onNext?: () => void
-  onBack?: () => void
+  onBack?: () => void,
+  pageStateKeyPrefix: string
 }

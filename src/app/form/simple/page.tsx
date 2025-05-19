@@ -11,7 +11,7 @@ export default function SimpleForm() {
     
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <MultiStepForm steps={steps} />
+      <MultiStepForm steps={steps} pageStateKeyPrefix="simple-form" />
     </main>
   )
 }

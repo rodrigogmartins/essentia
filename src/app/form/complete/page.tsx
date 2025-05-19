@@ -13,7 +13,7 @@ export default function CompleteForm() {
     
   return (
     <main className="p-4 max-w-4xl mx-auto">
-      <MultiStepForm steps={steps} />
+      <MultiStepForm steps={steps} pageStateKeyPrefix="complete-form" />
     </main>
   )
 }

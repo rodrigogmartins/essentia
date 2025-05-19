@@ -7,8 +7,8 @@ import { perfumesNotes } from '@/data/PerfumesNotes'
 import { perfumesAccords } from '@/data/PerfumesAccords'
 import { StepProps } from './StepProps'
 
-export default function Step4({ onBack, onNext }: StepProps) {
-  const STEP = 'step4'
+export default function Step4({ onBack, onNext, pageStateKeyPrefix }: StepProps) {
+  const STEP = `${pageStateKeyPrefix}-step4`
   const isFirstPageLoad = useRef(true)
   const [notLikedNotes, setNotLikedNotes] = useState<string[]>([])
   const [notLikedAccords, setNotLikedAccords] = useState<string[]>([])

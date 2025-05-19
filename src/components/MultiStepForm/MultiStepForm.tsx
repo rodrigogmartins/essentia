@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useStepNavigation } from '@/hooks/useStepNavigation'
 import { MultiStepFormProps } from './MultiStepFormProps'
 
-export default function MultiStepForm({ steps }: MultiStepFormProps) {
+export default function MultiStepForm({ steps, pageStateKeyPrefix }: MultiStepFormProps) {
   const router = useRouter()
   const [step, setStep] = useState(0)
   const StepComponent = steps[step]
@@ -44,6 +44,7 @@ export default function MultiStepForm({ steps }: MultiStepFormProps) {
           <StepComponent
             onNext={next}
             onBack={back}
+            pageStateKeyPrefix={pageStateKeyPrefix}
           />
         </motion.div>
     </AnimatePresence>

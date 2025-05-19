@@ -10,8 +10,8 @@ import { PerfumeCardSkeleton } from '@/components/PerfumeCardSkeleton'
 import { PerfumeResult } from '@/types/perfume'
 import { StepProps } from './StepProps'
 
-export default function Step2({ onBack, onNext }: StepProps) {
-  const STEP = 'step2'
+export default function Step2({ onBack, onNext, pageStateKeyPrefix }: StepProps) {
+  const STEP = `${pageStateKeyPrefix}-step2`
   const isFirstPageLoad = useRef(true)
   const [selected, setSelected] = useState<any[]>([])
   const [showSelected, setShowSelected] = useState(false)

@@ -8,8 +8,8 @@ import { predefinedSeasons } from '@/data/PredefinedSeasons'
 import { predefinedShifts } from '@/data/PredefinedShifts'
 import { predefinedClimates } from '@/data/PredefinedClimates'
 
-export default function Step5({ onBack, onNext }: StepProps) {
-  const STEP = 'step5'
+export default function Step5({ onBack, onNext, pageStateKeyPrefix }: StepProps) {
+  const STEP = `${pageStateKeyPrefix}-step5`
   const isFirstPageLoad = useRef(true)
   const [seasons, setSeasons] = useState<string[]>([])
   const [dayShifts, setDayShifts] = useState<string[]>([])
